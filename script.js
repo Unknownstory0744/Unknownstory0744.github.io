@@ -38,24 +38,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Persist audio instance
     const audioToggle = document.getElementById('audio-toggle');
+    const audioIcon = audioToggle ? audioToggle.querySelector('.audio-icon') : null;
     let isPlaying = false;
+    let userManuallyPaused = false;
+
     const audio = new Audio();
     audio.src = 'ambient.mp3'; 
     audio.loop = true;
     audio.volume = 0.4;
 
+    function updateAudioUI(playing) {
+        isPlaying = playing;
+        if (!audioToggle) return;
+        if (playing) {
+            audioToggle.classList.add('playing');
+            if (audioIcon) audioIcon.textContent = 'Sound On';
+        } else {
+            audioToggle.classList.remove('playing');
+            if (audioIcon) audioIcon.textContent = 'Sound Off';
+        }
+    }
+
+    function startMusic() {
+        if (userManuallyPaused) return;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                updateAudioUI(true);
+            }).catch(() => {
+                // If browser blocks immediate autoplay, start on first interaction anywhere
+                const onFirstInteraction = () => {
+                    if (!userManuallyPaused && !isPlaying) {
+                        audio.play().then(() => {
+                            updateAudioUI(true);
+                        }).catch(() => {});
+                    }
+                };
+                ['click', 'pointerdown', 'touchstart', 'keydown'].forEach(evt => {
+                    window.addEventListener(evt, onFirstInteraction, { once: true });
+                });
+            });
+        }
+    }
+
+    // Attempt to start music automatically on page load
+    startMusic();
+
     if (audioToggle) {
-        audioToggle.addEventListener('click', () => {
+        audioToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (isPlaying) {
                 audio.pause();
-                audioToggle.classList.remove('playing');
-                audioToggle.querySelector('.audio-icon').textContent = 'Sound Off';
+                userManuallyPaused = true;
+                updateAudioUI(false);
             } else {
-                audio.play().catch(e => console.log("Audio play blocked by browser"));
-                audioToggle.classList.add('playing');
-                audioToggle.querySelector('.audio-icon').textContent = 'Sound On';
+                userManuallyPaused = false;
+                audio.play().then(() => {
+                    updateAudioUI(true);
+                }).catch(err => console.log("Audio play blocked by browser:", err));
             }
-            isPlaying = !isPlaying;
         });
     }
 
