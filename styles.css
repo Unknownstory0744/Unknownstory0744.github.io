@@ -374,6 +374,7 @@ h1 {
     letter-spacing: -0.02em;
     background: linear-gradient(135deg, #ffffff 25%, #c084fc 70%, #2dd4bf 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 20px;
     filter: drop-shadow(0 0 30px rgba(192, 132, 252, 0.25));
