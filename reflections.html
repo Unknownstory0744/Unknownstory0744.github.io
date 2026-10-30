@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reflections | The Memories</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <!-- Smooth Scroll & Interactions -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+</head>
+
+<body>
+    <div class="grain-overlay"></div>
+
+    <nav>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="memories.html">Memories</a>
+            <a href="her.html">About Her</a>
+            <a href="reflections.html" class="active">Reflections</a>
+            <a href="letter.html">The Letter</a>
+        </div>
+        <div class="audio-toggle" id="audio-toggle">
+            <span class="audio-icon">Sound Off</span>
+            <div class="audio-bars">
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <header>
+            <h1>Reflections</h1>
+            <p class="subtitle">Lessons, realizations, and truths gathered along the way.</p>
+        </header>
+
+        <section class="memories-container">
+            <!-- Reflections Card 1 -->
+            <article class="memory-fragment" style="grid-column: 2 / 12;">
+                <div class="memory-date">A Quiet Space</div>
+                <div class="memory-content glass-card" style="font-size: clamp(1.3rem, 2.5vw, 2rem); line-height: 1.6;">
+                    A quiet sanctuary reserved for the lessons, realizations, and growth learned through love, patience, and time.
+                </div>
+            </article>
+        </section>
+
+        <footer style="margin-top: 200px; text-align: center; opacity: 0.3; font-weight: 300; font-size: 0.8rem;">
+            &copy; 2024 Digital Sanctuary
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
+
