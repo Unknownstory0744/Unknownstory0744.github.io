@@ -39,19 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let userManuallyPaused = false;
 
     const playlist = ['ambient.mp3', 'phool.m4a'];
-    let currentTrackIndex = Math.floor(Math.random() * playlist.length);
+    const chosenTrack = playlist[Math.floor(Math.random() * playlist.length)];
 
     const audio = new Audio();
-    audio.src = playlist[currentTrackIndex];
+    audio.src = chosenTrack;
+    audio.loop = true;
     audio.volume = 0.4;
-
-    audio.addEventListener('ended', () => {
-        currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-        audio.src = playlist[currentTrackIndex];
-        if (isPlaying) {
-            audio.play().catch(() => {});
-        }
-    });
 
     function updateAudioUI(playing) {
         isPlaying = playing;
