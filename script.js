@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialize Lenis Smooth Scroll
     const lenis = new Lenis({
         duration: 2.5,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     requestAnimationFrame(raf);
 
-    // Bind Parallax directly to Lenis to prevent duplicate window listeners
     lenis.on('scroll', ({ scroll }) => {
         const header = document.querySelector('header');
         if (header) {
@@ -27,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Setup Transitions & Audio
     const overlay = document.createElement('div');
     overlay.id = 'transition-overlay';
     document.body.appendChild(overlay);
@@ -36,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.classList.add('fade-out');
     }, 100);
 
-    // Persist audio instance
     const audioToggle = document.getElementById('audio-toggle');
     const audioIcon = audioToggle ? audioToggle.querySelector('.audio-icon') : null;
     let isPlaying = false;
@@ -66,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
             playPromise.then(() => {
                 updateAudioUI(true);
             }).catch(() => {
-                // If browser blocks immediate autoplay, start on first interaction anywhere
                 const onFirstInteraction = () => {
                     if (!userManuallyPaused && !isPlaying) {
                         audio.play().then(() => {
@@ -81,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Attempt to start music automatically on page load
     startMusic();
 
     if (audioToggle) {
@@ -100,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Custom Cursor
     const cursor = document.createElement('div');
     const follower = document.createElement('div');
     cursor.className = 'custom-cursor';
@@ -130,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animateCursor();
 
-    // 4. Page Logic & SPA Routing
     function initMagneticElements() {
         const magneticElements = document.querySelectorAll('nav a, .landing-btn, .audio-toggle');
         magneticElements.forEach(el => {
@@ -151,9 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentObserver = null;
 
     function initPageEffects() {
-        // Scroll Reveal
         const fragments = document.querySelectorAll('.memory-fragment');
-        if(currentObserver) { currentObserver.disconnect(); }
+        if (currentObserver) { currentObserver.disconnect(); }
         
         currentObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
@@ -168,9 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fragments.forEach(fragment => currentObserver.observe(fragment));
 
-        // Parallax is bound to Lenis scroll event globally to prevent duplicate listeners on page changes
-
-        // Tilt
         if (typeof VanillaTilt !== 'undefined') {
             VanillaTilt.init(document.querySelectorAll(".memory-media"), {
                 max: 5, speed: 400, glare: true, "max-glare": 0.2,
@@ -181,23 +169,22 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadPage(url, push = true) {
         try {
             overlay.classList.remove('fade-out');
-            await new Promise(r => setTimeout(r, 800)); // wait for fade
+            await new Promise(r => setTimeout(r, 800));
             
             const response = await fetch(url);
             const htmlString = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlString, 'text/html');
             
-            // Swap DOM segments
             document.querySelector('main').innerHTML = doc.querySelector('main').innerHTML;
             document.title = doc.title;
             const newNav = doc.querySelector('.nav-links');
-            if(newNav) { document.querySelector('.nav-links').innerHTML = newNav.innerHTML; }
+            if (newNav) { document.querySelector('.nav-links').innerHTML = newNav.innerHTML; }
             
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
             lenis.scrollTo(0, {immediate: true});
             
-            if(push) { window.history.pushState({path: url}, '', url); }
+            if (push) { window.history.pushState({path: url}, '', url); }
             
             attachNavigationListeners();
             initPageEffects();
@@ -205,18 +192,18 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => { overlay.classList.add('fade-out'); }, 100);
             
         } catch (error) {
-            window.location.href = url; // fallback
+            window.location.href = url;
         }
     }
 
     function attachNavigationListeners() {
         document.querySelectorAll('a').forEach(link => {
             if (link.hostname === window.location.hostname && !link.hash && !link.classList.contains('routed')) {
-                link.classList.add('routed'); // prevent double listeners
+                link.classList.add('routed');
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     const dest = link.getAttribute('href');
-                    if(dest) { loadPage(dest); }
+                    if (dest) { loadPage(dest); }
                 });
             }
         });
@@ -224,14 +211,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('popstate', (e) => {
-        if(e.state && e.state.path) {
+        if (e.state && e.state.path) {
             loadPage(e.state.path, false);
         } else {
             loadPage(window.location.pathname, false);
         }
     });
 
-    // Initial bootsrtap
     attachNavigationListeners();
     initPageEffects();
 });

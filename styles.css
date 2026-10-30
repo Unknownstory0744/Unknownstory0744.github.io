@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:wght@300;400;600&display=swap');
 
-/* Lenis smooth scrolling rules */
 html.lenis, html.lenis body {
     height: auto;
 }
@@ -17,10 +16,6 @@ html.lenis, html.lenis body {
     overflow: hidden;
 }
 
-/* =========================================================
-   Theme: Cosmic Aurora & Starlight
-   Deep midnight navy, glowing aurora ribbons, starlight glass
-   ========================================================= */
 :root {
     --bg-color: #060913;
     --bg-gradient: radial-gradient(ellipse 90% 60% at 50% -15%, rgba(99, 102, 241, 0.28) 0%, transparent 65%),
@@ -67,11 +62,10 @@ body {
     font-family: var(--font-sans);
     line-height: 1.6;
     overflow-x: hidden;
-    scroll-behavior: auto; /* Handled by Lenis */
+    scroll-behavior: auto;
     -webkit-font-smoothing: antialiased;
 }
 
-/* Ambient Floating Aurora Glows */
 body::before {
     content: "";
     position: fixed;
@@ -112,7 +106,6 @@ body::after {
     100% { transform: translate(-5%, 6%) scale(0.9); opacity: 0.8; }
 }
 
-/* Grain Overlay Effect */
 .grain-overlay {
     position: fixed;
     top: 0;
@@ -139,7 +132,6 @@ body::after {
     90% { transform: translate(10%, 5%); }
 }
 
-/* Custom Cursor */
 .custom-cursor {
     width: 32px;
     height: 32px;
@@ -173,7 +165,6 @@ body::after {
     will-change: transform;
 }
 
-/* Page Transition Overlay */
 #transition-overlay {
     position: fixed;
     top: 0;
@@ -191,7 +182,6 @@ body::after {
     opacity: 0;
 }
 
-/* Navigation */
 nav {
     position: fixed;
     top: 0;
@@ -251,7 +241,6 @@ nav a.active::after {
     border-radius: 2px;
 }
 
-/* Audio Toggle */
 .audio-toggle {
     display: flex;
     align-items: center;
@@ -310,7 +299,6 @@ nav a.active::after {
     50% { transform: scaleY(1); }
 }
 
-/* Base Layout */
 main {
     max-width: 1400px;
     margin: 0 auto;
@@ -319,7 +307,6 @@ main {
     z-index: 1;
 }
 
-/* Landing Page Centered Layout */
 .landing-content {
     height: calc(100vh - 280px);
     display: flex;
@@ -401,7 +388,6 @@ h1 {
     font-weight: 300;
 }
 
-/* Memory Cards */
 .memories-container {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -417,7 +403,6 @@ h1 {
     will-change: transform, opacity;
 }
 
-/* Asymmetrical Grid Logic for Desktop */
 @media (min-width: 768px) {
     .memory-fragment:nth-child(1) { grid-column: 1 / 8; }
     .memory-fragment:nth-child(2) { grid-column: 8 / 13; margin-top: 15vh; }
@@ -510,10 +495,9 @@ h1 {
 }
 
 .memory-media:hover .memory-img {
-    transform: scale(1.05); /* Slow inner zoom */
+    transform: scale(1.05);
 }
 
-/* Animations */
 @keyframes fadeUp {
     to {
         opacity: 1;
@@ -521,7 +505,6 @@ h1 {
     }
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 5px;
 }
