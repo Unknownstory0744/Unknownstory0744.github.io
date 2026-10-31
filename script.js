@@ -221,6 +221,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    document.addEventListener('submit', async (e) => {
+        if (e.target && e.target.id === 'unlock-form') {
+            e.preventDefault();
+            const input = document.getElementById('passcode-input');
+            const errorMsg = document.getElementById('error-msg');
+            const pwd = input ? input.value : '';
+            if (!pwd) return;
+
+            try {
+                const saltHex = '41ef93cf6575d40735386596ef7a4fb3';
+                const ivHex = '071fde2d613b9721c3900f3a';
+                const ciphertextBase64 = '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';
+
+                const saltBytes = new Uint8Array(saltHex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+                const ivBytes = new Uint8Array(ivHex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+                const cipherBytes = Uint8Array.from(atob(ciphertextBase64), c => c.charCodeAt(0));
+
+                const enc = new TextEncoder();
+                const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(pwd), { name: 'PBKDF2' }, false, ['deriveKey']);
+                const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: saltBytes, iterations: 100000, hash: 'SHA-256' }, keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+                const decryptedBuffer = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: ivBytes }, key, cipherBytes);
+
+                const html = new TextDecoder().decode(decryptedBuffer);
+                const lockScreen = document.getElementById('lock-screen');
+                const container = document.getElementById('unlocked-content');
+
+                if (lockScreen && container) {
+                    lockScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        lockScreen.style.display = 'none';
+                        container.innerHTML = html;
+                        container.style.display = 'block';
+                        setTimeout(() => { container.style.opacity = '1'; }, 50);
+                        initPageEffects();
+                    }, 300);
+                }
+            } catch (err) {
+                if (errorMsg) {
+                    errorMsg.textContent = 'Incorrect passcode.';
+                    errorMsg.style.opacity = '1';
+                    setTimeout(() => { errorMsg.style.opacity = '0'; }, 3000);
+                }
+                if (input) {
+                    input.value = '';
+                    input.focus();
+                }
+            }
+        }
+    });
+
     attachNavigationListeners();
     initPageEffects();
 });
