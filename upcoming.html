@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upcoming | The Memories</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
@@ -15,7 +15,8 @@
     <div class="grain-overlay"></div>
 
     <nav>
-        <div class="nav-links">
+        <a href="index.html" class="nav-brand">The Memories</a>
+        <div class="nav-links" id="nav-links">
             <a href="index.html">Home</a>
             <a href="memories.html">Memories</a>
             <a href="her.html">About Her</a>
@@ -23,11 +24,17 @@
             <a href="letter.html">The Letter</a>
             <a href="upcoming.html" class="active">Upcoming</a>
         </div>
-        <div class="audio-toggle" id="audio-toggle">
-            <span class="audio-icon">Sound Off</span>
-            <div class="audio-bars">
-                <span></span><span></span><span></span><span></span>
+        <div class="nav-actions">
+            <div class="audio-toggle" id="audio-toggle">
+                <span class="audio-icon">Sound Off</span>
+                <div class="audio-bars">
+                    <span></span><span></span><span></span><span></span>
+                </div>
             </div>
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
@@ -43,7 +50,7 @@
                 <h2 style="font-family: var(--font-serif); font-size: 2.2rem; font-style: italic; margin-bottom: 12px; background: linear-gradient(135deg, #ffffff 40%, #c084fc 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Protected Space</h2>
                 <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 28px; letter-spacing: 0.05em;">Enter the passcode to view upcoming fragments.</p>
                 <form id="unlock-form">
-                    <input type="password" id="passcode-input" placeholder="Passcode" autocomplete="off" style="width: 100%; padding: 14px 20px; background: rgba(6, 9, 19, 0.7); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 10px; color: var(--text-primary); font-size: 1.1rem; text-align: center; letter-spacing: 0.3em; margin-bottom: 18px; outline: none; transition: all 0.3s ease;">
+                    <input type="password" id="passcode-input" inputmode="numeric" placeholder="Passcode" autocomplete="off" style="width: 100%; padding: 14px 20px; background: rgba(6, 9, 19, 0.7); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 10px; color: var(--text-primary); font-size: 1.1rem; text-align: center; letter-spacing: 0.3em; margin-bottom: 18px; outline: none; transition: all 0.3s ease;">
                     <button type="submit" class="landing-btn" style="width: 100%; margin-top: 0; padding: 14px 0; font-size: 0.8rem;">Unlock</button>
                     <p id="error-msg" style="color: #f87171; font-size: 0.85rem; margin-top: 14px; opacity: 0; transition: opacity 0.3s ease; min-height: 1.2em;"></p>
                 </form>
@@ -57,7 +64,12 @@
         </footer>
     </main>
 
-    <script src="script.js"></script>
+    <div class="visitor-counter-pill" title="Total Visitors">
+        <span class="visitor-pulse-dot"></span>
+        <img src="https://hits.sh/unknownstory0744.github.io.svg?style=flat&label=VISITORS&color=2dd4bf&labelColor=0c1222" alt="Visitors" class="visitor-badge-img">
+    </div>
+
+    <script src="script.js?v=2"></script>
 </body>
 
 </html>

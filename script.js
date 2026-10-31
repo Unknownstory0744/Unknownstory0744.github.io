@@ -38,11 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let isPlaying = false;
     let userManuallyPaused = false;
 
-    const playlist = ['ambient.mp3', 'phool.m4a'];
-    const chosenTrack = playlist[Math.floor(Math.random() * playlist.length)];
-
     const audio = new Audio();
-    audio.src = chosenTrack;
+    audio.src = 'phool.m4a';
     audio.loop = true;
     audio.volume = 0.4;
 
@@ -221,29 +218,112 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.addEventListener('submit', async (e) => {
+    function sha256(data) {
+        const K = [
+            0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+            0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+            0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+            0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+            0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+            0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+            0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+            0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+        ];
+        let H = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+        const bytes = typeof data === 'string' ? new TextEncoder().encode(data) : data;
+        const bitLen = bytes.length * 8;
+        const padLen = (bytes.length % 64 < 56) ? (56 - (bytes.length % 64)) : (120 - (bytes.length % 64));
+        const totalLen = bytes.length + padLen + 8;
+        const buf = new Uint8Array(totalLen);
+        buf.set(bytes);
+        buf[bytes.length] = 0x80;
+        const view = new DataView(buf.buffer);
+        view.setUint32(totalLen - 4, bitLen, false);
+        view.setUint32(totalLen - 8, Math.floor(bitLen / 0x100000000), false);
+        const W = new Uint32Array(64);
+        for (let i = 0; i < totalLen; i += 64) {
+            for (let t = 0; t < 16; t++) W[t] = view.getUint32(i + t * 4, false);
+            for (let t = 16; t < 64; t++) {
+                const s0 = ((W[t-15] >>> 7) | (W[t-15] << 25)) ^ ((W[t-15] >>> 18) | (W[t-15] << 14)) ^ (W[t-15] >>> 3);
+                const s1 = ((W[t-2] >>> 17) | (W[t-2] << 15)) ^ ((W[t-2] >>> 19) | (W[t-2] << 13)) ^ (W[t-2] >>> 10);
+                W[t] = (W[t-16] + s0 + W[t-7] + s1) >>> 0;
+            }
+            let a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+            for (let t = 0; t < 64; t++) {
+                const S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+                const ch = (e & f) ^ ((~e) & g);
+                const temp1 = (h + S1 + ch + K[t] + W[t]) >>> 0;
+                const S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+                const maj = (a & b) ^ (a & c) ^ (b & c);
+                const temp2 = (S0 + maj) >>> 0;
+                h = g; g = f; f = e; e = (d + temp1) >>> 0; d = c; c = b; b = a; a = (temp1 + temp2) >>> 0;
+            }
+            H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0; H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0;
+            H[4] = (H[4] + e) >>> 0; H[5] = (H[5] + f) >>> 0; H[6] = (H[6] + g) >>> 0; H[7] = (H[7] + h) >>> 0;
+        }
+        const out = new Uint8Array(32);
+        const outView = new DataView(out.buffer);
+        for (let i = 0; i < 8; i++) outView.setUint32(i * 4, H[i], false);
+        return out;
+    }
+
+    function rc4(key, data) {
+        let s = [], j = 0, x, res = new Uint8Array(data.length);
+        for (let i = 0; i < 256; i++) s[i] = i;
+        for (let i = 0; i < 256; i++) {
+            j = (j + s[i] + key[i % key.length]) % 256;
+            x = s[i]; s[i] = s[j]; s[j] = x;
+        }
+        let i = 0; j = 0;
+        for (let k = 0; k < 1536; k++) {
+            i = (i + 1) % 256;
+            j = (j + s[i]) % 256;
+            x = s[i]; s[i] = s[j]; s[j] = x;
+        }
+        for (let k = 0; k < data.length; k++) {
+            i = (i + 1) % 256;
+            j = (j + s[i]) % 256;
+            x = s[i]; s[i] = s[j]; s[j] = x;
+            res[k] = data[k] ^ s[(s[i] + s[j]) % 256];
+        }
+        return res;
+    }
+
+    function deriveKey(password, salt) {
+        let key = sha256(password + salt);
+        for (let i = 0; i < 25000; i++) {
+            key = sha256(key);
+        }
+        return key;
+    }
+
+    document.addEventListener('submit', (e) => {
         if (e.target && e.target.id === 'unlock-form') {
             e.preventDefault();
             const input = document.getElementById('passcode-input');
             const errorMsg = document.getElementById('error-msg');
-            const pwd = input ? input.value : '';
+            const pwd = input ? input.value.trim() : '';
             if (!pwd) return;
 
             try {
-                const saltHex = '41ef93cf6575d40735386596ef7a4fb3';
-                const ivHex = '071fde2d613b9721c3900f3a';
-                const ciphertextBase64 = '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';
+                const salt = 'aurora_veil_7744';
+                const ciphertextBase64 = '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';
 
-                const saltBytes = new Uint8Array(saltHex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
-                const ivBytes = new Uint8Array(ivHex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
-                const cipherBytes = Uint8Array.from(atob(ciphertextBase64), c => c.charCodeAt(0));
+                const key = deriveKey(pwd, salt);
+                const rawCipher = atob(ciphertextBase64);
+                const cipherBytes = new Uint8Array(rawCipher.length);
+                for (let i = 0; i < rawCipher.length; i++) {
+                    cipherBytes[i] = rawCipher.charCodeAt(i);
+                }
 
-                const enc = new TextEncoder();
-                const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(pwd), { name: 'PBKDF2' }, false, ['deriveKey']);
-                const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: saltBytes, iterations: 100000, hash: 'SHA-256' }, keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
-                const decryptedBuffer = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: ivBytes }, key, cipherBytes);
+                const decBytes = rc4(key, cipherBytes);
+                const decStr = new TextDecoder().decode(decBytes);
 
-                const html = new TextDecoder().decode(decryptedBuffer);
+                if (!decStr.startsWith('VAULT_OK:')) {
+                    throw new Error('Invalid passcode');
+                }
+
+                const html = decStr.slice(9);
                 const lockScreen = document.getElementById('lock-screen');
                 const container = document.getElementById('unlocked-content');
 
@@ -268,6 +348,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     input.focus();
                 }
             }
+        }
+    });
+
+    function toggleMenu(forceClose = false) {
+        const h = document.getElementById('nav-hamburger');
+        const n = document.getElementById('nav-links');
+        if (!h || !n) return;
+        const isOpen = forceClose ? false : !n.classList.contains('open');
+        h.classList.toggle('open', isOpen);
+        n.classList.toggle('open', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    document.addEventListener('click', (e) => {
+        if (e.target && e.target.closest('#nav-hamburger')) {
+            e.stopPropagation();
+            toggleMenu();
+        } else if (e.target && e.target.closest('.nav-links a')) {
+            toggleMenu(true);
         }
     });
 

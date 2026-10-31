@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Her | The Memories</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
@@ -15,7 +15,8 @@
     <div class="grain-overlay"></div>
 
     <nav>
-        <div class="nav-links">
+        <a href="index.html" class="nav-brand">The Memories</a>
+        <div class="nav-links" id="nav-links">
             <a href="index.html">Home</a>
             <a href="memories.html">Memories</a>
             <a href="her.html" class="active">About Her</a>
@@ -23,11 +24,17 @@
             <a href="letter.html">The Letter</a>
             <a href="upcoming.html">Upcoming</a>
         </div>
-        <div class="audio-toggle" id="audio-toggle">
-            <span class="audio-icon">Sound Off</span>
-            <div class="audio-bars">
-                <span></span><span></span><span></span><span></span>
+        <div class="nav-actions">
+            <div class="audio-toggle" id="audio-toggle">
+                <span class="audio-icon">Sound Off</span>
+                <div class="audio-bars">
+                    <span></span><span></span><span></span><span></span>
+                </div>
             </div>
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
@@ -189,6 +196,31 @@
                     hurt, the tears, and the hard days, we held on and never let go.
                 </div>
             </article>
+
+            <article class="memory-fragment" style="grid-column: 2 / 12; margin-top: 12vh;">
+                <div class="memory-date">October Theory</div>
+                <div class="memory-content glass-card" style="font-size: clamp(1.35rem, 2.6vw, 2rem); line-height: 1.8;">
+                    <p style="margin-bottom: 1.6rem;">
+                        They say the October theory whispers that in October, someone who felt like your very own drifts far away, and in their place, a stranger quietly slips into your life. Some bonds end without a single fight, while complete strangers begin to feel like your own without any reason. Some unfinished stories reach their quiet end right here, while new stories begin right from this threshold. Perhaps a month doesn't merely change the weather; sometimes, it changes a person's entire world. And the truth is, the one who left taught you a lesson, and the one who arrives will give you a reason.
+                    </p>
+                    <p style="margin-bottom: 1.8rem; color: var(--text-secondary);">
+                        And now, October is slipping away. Tomorrow, November knocks at the door. Only two months of the year remain, but to find oneself all over again, a whole chance still waits ahead...
+                    </p>
+                    <div style="width: 60px; height: 1px; background: linear-gradient(90deg, var(--accent-teal), transparent); margin: 2rem 0;"></div>
+                    <p style="margin-bottom: 1.6rem; color: #ffffff;">
+                        But... I don't know about anyone new ever entering my life, but one thing is certain: on this last day of October 2026, someone truly walked away, and that someone is you, my love.
+                    </p>
+                    <p style="margin-bottom: 1.6rem;">
+                        This bond ended without a single fight, without any argument. It ended purely because of fate. Neither did you break this bond, nor did I. It was broken by nazar and by destiny.
+                    </p>
+                    <p style="margin-bottom: 1.6rem; color: var(--accent-teal); text-shadow: 0 0 15px rgba(45, 212, 191, 0.35);">
+                        🧿 Nazar is so real, my love, and look how it worked; we have been separated.
+                    </p>
+                    <p style="margin-bottom: 0; color: var(--text-secondary); font-style: italic;">
+                        I know nothing of new stories beginning, but yes... some stories were left forever unfinished.
+                    </p>
+                </div>
+            </article>
         </section>
 
         <footer style="margin-top: 200px; text-align: center; opacity: 0.2; font-weight: 300; font-size: 0.75rem; letter-spacing: 0.2em;">
@@ -196,7 +228,12 @@
         </footer>
     </main>
 
-    <script src="script.js"></script>
+    <div class="visitor-counter-pill" title="Total Visitors">
+        <span class="visitor-pulse-dot"></span>
+        <img src="https://hits.sh/unknownstory0744.github.io.svg?style=flat&label=VISITORS&color=2dd4bf&labelColor=0c1222" alt="Visitors" class="visitor-badge-img">
+    </div>
+
+    <script src="script.js?v=2"></script>
 </body>
 
 </html>
